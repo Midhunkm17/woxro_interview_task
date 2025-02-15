@@ -1,101 +1,233 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Cube images array
+const cubeImages = [
+  [
+    "/img1.jpg.png",
+    "/img2.jpg.png",
+    "/img1.jpg.png",
+    "/img2.jpg.png",
+    "/img1.jpg.png",
+    "/img2.jpg.png",
+  ],
+  [
+    "/img7.jpg.png",
+    "/img8.jpg.png",
+    "/img7.jpg.png",
+    "/img8.jpg.png",
+    "/img7.jpg.png",
+    "/img8.jpg.png",
+  ],
+  [
+    "/img13.jpg.png",
+    "/img14.jpg.png",
+    "/img13.jpg.png",
+    "/img14.jpg.png",
+    "/img13.jpg.png",
+    "/img14.jpg.png",
+  ],
+  [
+    "/img19.jpg.png",
+    "/img20.jpg.png",
+    "/img19.jpg.png",
+    "/img20.jpg.png",
+    "/img19.jpg.png",
+    "/img20.jpg.png",
+  ],
+  [
+    "/img25.jpg.png",
+    "/img26.jpg.png",
+    "/img25.jpg.png",
+    "/img26.jpg.png",
+    "/img25.jpg.png",
+    "/img26.jpg.png",
+  ],
+  [
+    "/img31.jpg.png",
+    "/img32.jpg.png",
+    "/img31.jpg.png",
+    "/img32.jpg.png",
+    "/img31.jpg.png",
+    "/img32.jpg.png",
+  ],
+];
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const sectionRef = useRef(null);
+  const cubeRefs = useRef([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "+=100%",
+        scrub: true,
+        pin: true,
+      },
+    });
+
+    // zoomin&out trasition
+    tl.fromTo(
+      ".first-section",
+      { scale: 1, opacity: 1, filter: "blur(0px)" },
+      { scale: 1.2, opacity: 1, filter: "blur(10px)" }
+    )
+      .to(".first-section", { scale: 1.2, opacity: 0, filter: "blur(20px)" })
+      .fromTo(
+        ".second-section",
+        { scale: 0.4, opacity: 0, filter: "blur(10px)" },
+        { scale: 1, opacity: 1, filter: "blur(0px)" },
+        "<"
+      );
+    // Ensure cubes rotate on scroll
+    cubeRefs.current.forEach((cube) => {
+      gsap.to(cube, {
+        rotationY: "+=360",
+        rotationX: "+=360",
+        duration: 4,
+        ease: "linear",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top center",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    });
+  }, []);
+
+  return (
+    <>
+      <div
+        ref={sectionRef}
+        className="section-wrapper relative h-screen w-full overflow-hidden"
+      >
+        {/* First Section */}
+        <div className="first-section absolute inset-0 flex flex-col justify-center items-center text-center px-4 h-screen">
+          <img
+            className="w-[156px] h-[96px] mt-10"
+            src="/Group 1.png"
+            alt="Logo"
+          />
+          <h1 className="text-[#FFE9D9] text-xl sm:text-3xl md:text-4xl lg:text-6xl w-[100%] sm:w-[700px] md:w-[900px] lg:w-[1057px] mt-14 font-serif">
+            The First Media Company crafted For the Digital First generation
+          </h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {/* Second Section */}
+        <div className="second-section absolute inset-0 block lg:flex md:flex sm:flex justify-center items-center h-screen w-screen gap-2 lg:gap-40 mt-60 lg:mt-0 md:mt-0 sm:mt-0">
+          {/* Left Side Cubes */}
+          <div className="flex flex-row lg:flex-col md:flex-col sm:flex-col gap-32 lg:gap-28 ml-8 mb-4">
+            {[0, 1, 2].map((index) => (
+              <div
+                key={index}
+                ref={(el) => (cubeRefs.current[index] = el)}
+                className={`cube block ${
+                  index === 0 ? "lg:ml-12" : index === 2 ? "lg:ml-12" : "ml-0"
+                } ${index === 1 && "hidden lg:block md:block sm:block"}`}
+              >
+                {cubeImages[index].map((image, i) => (
+                  <div
+                    key={i}
+                    className={`face face-${i}`}
+                    style={{
+                      backgroundImage: `url('${
+                        image ? image : "/img19.jpg.png"
+                      }')`,
+                    }}
+                  ></div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center max-w-xl">
+            <h2 className="text-[#FFE9D9] text-lg lg:text-6xl font-semibold">
+              Where innovation meets precision.
+            </h2>
+            <p className="text-[#85817f] text-sm lg:text-base md:text-base sm:text-base mt-4">
+              Symphonia unites visionary thinkers, creative architects, and
+              analytical experts, collaborating seamlessly to transform
+              challenges into opportunities. Together, we deliver tailored
+              solutions that drive impact and inspire growth.
+            </p>
+          </div>
+
+          {/* Right Side Cubes */}
+          <div className="flex flex-row lg:flex-col md:flex-col sm:flex-col gap-32 lg:gap-28 ml-8 mt-2">
+            {[3, 4, 5].map((index) => (
+              <div
+                key={index}
+                ref={(el) => (cubeRefs.current[index] = el)}
+                className={`cube ${
+                  index === 4
+                    ? "lg:ml-16 hidden lg:block md:block sm:block"
+                    : "ml-0"
+                }`}
+              >
+                {cubeImages[index].map((image, i) => (
+                  <div
+                    key={i}
+                    className={`face face-${i}`}
+                    style={{ backgroundImage: `url('${image}')` }}
+                  ></div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-center items-center font-semibold bg-[#CDB9AB] h-screen">
+        <h5 className="text-3xl text-[#331707] bg-transparent">
+          Your next section goes here.
+        </h5>
+      </div>
+
+      {/* Cube Styling */}
+      <style jsx>{`
+        .cube {
+          position: relative;
+          width: 100px;
+          height: 100px;
+          transform-style: preserve-3d;
+        }
+
+        .face {
+          position: absolute;
+          width: 100px;
+          height: 100px;
+          background-size: cover;
+          background-position: center;
+          border: 2px solid #fff;
+        }
+
+        .face-0 {
+          transform: translateZ(50px);
+        }
+        .face-1 {
+          transform: rotateY(180deg) translateZ(50px);
+        }
+        .face-2 {
+          transform: rotateY(-90deg) translateZ(50px);
+        }
+        .face-3 {
+          transform: rotateY(90deg) translateZ(50px);
+        }
+        .face-4 {
+          transform: rotateX(90deg) translateZ(50px);
+        }
+        .face-5 {
+          transform: rotateX(-90deg) translateZ(50px);
+        }
+      `}</style>
+    </>
   );
 }
