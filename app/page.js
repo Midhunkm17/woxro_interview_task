@@ -138,9 +138,7 @@ export default function Home() {
                     key={i}
                     className={`face face-${i}`}
                     style={{
-                      backgroundImage: `url('${
-                        image ? image : "/img19.jpg.png"
-                      }')`,
+                      backgroundImage: `url('${image}')`,
                     }}
                   ></div>
                 ))}
